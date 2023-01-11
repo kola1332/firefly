@@ -73,12 +73,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    if (initialLink != null) {
-      final Uri deepLink = initialLink.link;
-      // Example of using the dynamic link to push the user to a different screen
-      Navigator.pushNamed(context, deepLink.path);
-    }
-
     super.initState();
     initDynamicLinks();
     testLink();
@@ -90,6 +84,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      Navigator.pushNamed(context, dynamicLinkData.link.path);
+    }).onError((error) {
+      throw Exception();
+    });
     Future<String> route = rideLightning();
     print('rr $route');
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
