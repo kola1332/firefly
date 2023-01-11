@@ -2,6 +2,7 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:firefly/dark.dart';
 import 'package:firefly/ten.dart';
 import 'package:flutter/services.dart';
 import 'firebase_options.dart';
@@ -13,6 +14,8 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
+  print('===============================================================');
+  print('');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -22,8 +25,7 @@ void main() async {
       await FirebaseDynamicLinks.instance.getInitialLink();
   print('r START');
   print('t5 $initialLink');
-  print('t6 ${initialLink?.android}');
-  print('t7 ${initialLink?.link}');
+  print('t8 ${initialLink?.link}');
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -46,11 +48,23 @@ void main() async {
       print('Message also contained a notification: ${message.notification}');
     }
   });
-  runApp(const MyApp());
+
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) {
+    // TODO: If necessary send token to application server.
+
+    // Note: This callback is fired at each app startup and whenever a new
+    // token is generated.
+  }).onError((err) {
+    // Error getting token.
+  });
+  print('token: $fcmToken');
+
+  runApp(MyApp(initialLink));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  MyApp(PendingDynamicLinkData? initialLink, {super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -59,24 +73,36 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    // TODO: implement initState
+    if (initialLink != null) {
+      final Uri deepLink = initialLink.link;
+      // Example of using the dynamic link to push the user to a different screen
+      Navigator.pushNamed(context, deepLink.path);
+    }
+
     super.initState();
     initDynamicLinks();
     testLink();
     testLink2();
+    Future<String> route = rideLightning();
+    print('rr $route');
+    print('rr');
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<String> route = rideLightning();
+    print('rr $route');
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.white,
     ));
     return MaterialApp(
       routes: {
+        '/': ((context) => const Dark()),
         '/profi': ((context) => const Profile()),
         "/start": ((context) => const Profile()),
-        // '/': ((context) => const Profile()),
+        "/dark": ((context) => const Dark()),
+        "/light": ((context) => const Home()),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -84,7 +110,7 @@ class _MyAppState extends State<MyApp> {
         backgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      // home: (route1 == 'https://www.google.com') ? const Dark() : const Home(),
     );
   }
 }
@@ -152,37 +178,32 @@ void testLink() async {
   );
   final dynamicLink =
       await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+  print('dynamic $dynamicLink');
 }
 
 void testLink2() async {
   final dynamicLinkParams = DynamicLinkParameters(
-    link: Uri.parse("firefly.page.link"),
-    uriPrefix: "https://example.page.link",
+    link: Uri.parse("https://firefly.page.link/start"),
+    uriPrefix: "https://firefly.page.link/",
     androidParameters:
         const AndroidParameters(packageName: "com.example.firefly"),
   );
   final dynamicLink =
       await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+  print('dynamic $dynamicLink');
 }
 
-void testLink3() async {
-  final dynamicLinkParams = DynamicLinkParameters(
-    link: Uri.parse("firefly.page.link"),
-    uriPrefix: "https://example.page.link",
-    androidParameters:
-        const AndroidParameters(packageName: "com.example.firefly"),
-  );
-  final dynamicLink =
-      await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
-}
-
-void testLink4() async {
-  final dynamicLinkParams = DynamicLinkParameters(
-    link: Uri.parse("firefly.page.link"),
-    uriPrefix: "https://example.page.link",
-    androidParameters:
-        const AndroidParameters(packageName: "com.example.firefly"),
-  );
-  final dynamicLink =
-      await FirebaseDynamicLinks.instance.buildLink(dynamicLinkParams);
+Future<String> rideLightning() async {
+  final PendingDynamicLinkData? link =
+      await FirebaseDynamicLinks.instance.getInitialLink();
+  if (link?.link != null) {
+    if (link!.link == 'https://www.google.com') {
+      print('home');
+      return 'home';
+    } else {
+      return '/';
+    }
+  } else {
+    return '/';
+  }
 }
