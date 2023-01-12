@@ -100,6 +100,7 @@ class Work extends State<MyApp> {
     });
 
     // try work dyn | from G | &&
+    print('&& START');
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
       final Uri uri = dynamicLinkData.link;
       print('&& ${dynamicLinkData.link}');
