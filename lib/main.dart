@@ -13,7 +13,7 @@ import 'firebase_options.dart';
 
 // ?? | push
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
+  print("Handling a background message1: ${message.messageId}");
 }
 
 void main() async {
@@ -32,15 +32,24 @@ void main() async {
   final Uri? uri = initialLink?.link;
   if (uri != null) {
     final queryParams = uri.queryParameters;
-    print('() ${uri.queryParameters}');
+    print('N3 ${uri.queryParameters}');
     if (queryParams.isNotEmpty) {
       // Navigator.of(context).pushNamed(queryParams.values.first);
-      print('() ${queryParams.values.first}');
+      print('N3 ${queryParams.values.first}');
     }
   }
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
 
   // NotificationSettings settings = await messaging.requestPermission(
   //   alert: true,
@@ -61,11 +70,11 @@ void main() async {
     }
   });
 
-  // final fcmToken = await FirebaseMessaging.instance.getToken();
-  // FirebaseMessaging.instance.onTokenRefresh
-  //     .listen((fcmToken) {})
-  //     .onError((err) {});
-  // print('token: $fcmToken');
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  FirebaseMessaging.instance.onTokenRefresh
+      .listen((fcmToken) {})
+      .onError((err) {});
+  print('token: $fcmToken');
 
   runApp(const MyApp());
 }
@@ -92,23 +101,25 @@ class Work extends State<MyApp> {
   Widget build(BuildContext context) {
     // try work dyn | early | **
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-      print('** ${dynamicLinkData.link.path}');
-      Navigator.pushNamed(context, dynamicLinkData.link.path);
+      print('N1 ${dynamicLinkData.link.path}');
+      if (dynamicLinkData.link.path.isNotEmpty) {
+        Navigator.pushNamed(context, dynamicLinkData.link.path);
+      }
     }).onError((error) {
-      print('** error!!');
+      print('N1 error!!');
       throw Exception();
     });
 
     // try work dyn | from G | &&
-    print('&& START');
+    print('N2 START');
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
       final Uri uri = dynamicLinkData.link;
-      print('&& ${dynamicLinkData.link}');
+      print('N2 ${dynamicLinkData.link}');
       final queryParams = uri.queryParameters;
-      print('&& ${uri.queryParameters}');
+      print('N2 ${uri.queryParameters}');
       if (queryParams.isNotEmpty) {
         Navigator.of(context).pushNamed(queryParams.values.first);
-        print('&& ${queryParams.values.first}');
+        print('N2 ${queryParams.values.first}');
       }
     });
 
@@ -119,12 +130,7 @@ class Work extends State<MyApp> {
     ));
     return MaterialApp(
       routes: {
-        // '/': ((context) => const Dark()),
         '/': ((context) => Tex(m: '/')),
-        // '/profi': ((context) => const Profile()),
-        // '/start': ((context) => const Profile()),
-        // '/dark': ((context) => const Dark()),
-        // '/light': ((context) => const Home()),
         '/profi': ((context) => Tex(m: 'profi')),
         '/start': ((context) => Tex(m: 'start')),
         '/dark': ((context) => Tex(m: 'dark')),
@@ -137,13 +143,13 @@ class Work extends State<MyApp> {
         backgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      // home: (route1 == 'https://www.google.com') ? const Dark() : const Home(),
     );
   }
 
   //try work dyn | from G | ()
   void initDynamicLinks2() async {
     FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+      print('G1');
       final Uri uri = dynamicLinkData.link;
       final queryParams = uri.queryParameters;
       if (queryParams.isNotEmpty) {
@@ -186,10 +192,7 @@ void initDynamicLinks() async {
   var t = FirebaseDynamicLinks.instance.onLink;
   final PendingDynamicLinkData? initialLinkk =
       await FirebaseDynamicLinks.instance.getInitialLink();
-  // print('t1 ${t.length}');
-  // print('t2 $t');
-  // print('t3 ${t.isEmpty}');
-  // print('t4 ${t.isEmpty}');
+  print('D1 $initialLinkk');
   // print('[initialLinkk] $initialLinkk'); //
   // print('[initialLinkk?.android] ${initialLinkk?.android}'); //
   // print('[initialLinkk?.link] ${initialLinkk?.link}'); //
