@@ -13,7 +13,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   print('NEW LINE ================================');
-  //
+  // 1
   // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
   //   print('Got a message whilst in the foreground!');
   //   print('Message data: ${message.data}');
@@ -22,14 +22,14 @@ void main() async {
   //     print('Message also contained a notification: ${message.notification}');
   //   }
   // });
-  //
-  RemoteMessage? initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage == null) {
-    print('no got noti');
-  } else {
-    print('noti = $initialMessage');
-  }
+  // 2
+  // RemoteMessage? initialMessage =
+  //     await FirebaseMessaging.instance.getInitialMessage();
+  // if (initialMessage == null) {
+  //   print('no got noti');
+  // } else {
+  //   print('noti = $initialMessage');
+  // }
   //
   runApp(const MyApp());
 }
@@ -51,8 +51,9 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        '/': (context) => const Home(),
-        '/chat': (context) => Tex(m: 'Chat'),
+        // '/': (context) => const Home(),
+        '/': (context) => const Application(),
+        '/chat': (context) => const Tex(m: 'Chat'),
       },
     );
   }
@@ -70,6 +71,7 @@ class _HomeState extends State<Home> {
   void initState() {
     // fcmTokenPrint();
     listenNotification(context);
+    listenNotification2(context);
     super.initState();
   }
 
@@ -101,13 +103,25 @@ Future<void> fcmTokenPrint() async {
 
 Future<void> listenNotification(BuildContext context) async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+    // print('Got a message whilst in the foreground!');
+    // print('Message data: ${message.data}');
 
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+      // print('Message also contained a notification: ${message.notification}');
+      print('go to chat 1 met');
       Navigator.pushNamed(context, '/chat');
     }
   });
-  // Navigator.pushNamed(context, '/chat');
+}
+
+Future<void> listenNotification2(BuildContext context) async {
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage == null) {
+    print('no got noti');
+  } else {
+    print('noti = $initialMessage');
+    print('go to chat 2 met');
+    Navigator.pushNamed(context, '/chat');
+  }
 }

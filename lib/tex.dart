@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Tex extends StatefulWidget {
-  Tex({super.key, this.m});
+  const Tex({super.key, this.m});
 
   final m;
 
@@ -65,6 +67,8 @@ class _TexState extends State<Tex> {
 }
 
 class Application extends StatefulWidget {
+  const Application({super.key});
+
   @override
   State<StatefulWidget> createState() => _Application();
 }
@@ -108,6 +112,21 @@ class _Application extends State<Application> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text("..."));
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        toolbarHeight: 0,
+        elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark,
+        ),
+      ),
+      body: const Center(
+          child: Text(
+        'Home',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+      )),
+    );
   }
 }
