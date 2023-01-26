@@ -17,15 +17,24 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,41 +52,11 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD0beAn8XxprcD4DDXE2yfcZTfzcrPRcIM',
-    appId: '1:638732060191:web:f6bff487732cffb3c1772a',
-    messagingSenderId: '638732060191',
-    projectId: 'firefly-27144',
-    authDomain: 'firefly-27144.firebaseapp.com',
-    storageBucket: 'firefly-27144.appspot.com',
-    measurementId: 'G-YWX4Q0PSLS',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC_MaiQNEUIqLKaYDCN93FoUUUQ0jng-wU',
-    appId: '1:638732060191:android:931bc544eaa41f6cc1772a',
-    messagingSenderId: '638732060191',
-    projectId: 'firefly-27144',
-    storageBucket: 'firefly-27144.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBwtvbuWga7vqBsT3N7_yIEhJaANVhS4Ic',
-    appId: '1:638732060191:ios:5efc15e72710b04fc1772a',
-    messagingSenderId: '638732060191',
-    projectId: 'firefly-27144',
-    storageBucket: 'firefly-27144.appspot.com',
-    iosClientId: '638732060191-mld118949k3o5tik2hqh8f77nnohmggp.apps.googleusercontent.com',
-    iosBundleId: 'com.example.firefly',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBwtvbuWga7vqBsT3N7_yIEhJaANVhS4Ic',
-    appId: '1:638732060191:ios:5efc15e72710b04fc1772a',
-    messagingSenderId: '638732060191',
-    projectId: 'firefly-27144',
-    storageBucket: 'firefly-27144.appspot.com',
-    iosClientId: '638732060191-mld118949k3o5tik2hqh8f77nnohmggp.apps.googleusercontent.com',
-    iosBundleId: 'com.example.firefly',
+    apiKey: 'AIzaSyBPtBqvrbCBA1J3_u1Cz_VHFD_6pgVXq54',
+    appId: '1:319296572404:android:9744e28e96aa1c6bb5c7a1',
+    messagingSenderId: '319296572404',
+    projectId: 'firefly-77d1e',
+    storageBucket: 'firefly-77d1e.appspot.com',
   );
 }
