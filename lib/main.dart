@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firefly/tex.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +12,25 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print('NEW LINE ================================');
+  //
+  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //   print('Got a message whilst in the foreground!');
+  //   print('Message data: ${message.data}');
+
+  //   if (message.notification != null) {
+  //     print('Message also contained a notification: ${message.notification}');
+  //   }
+  // });
+  //
+  RemoteMessage? initialMessage =
+      await FirebaseMessaging.instance.getInitialMessage();
+  if (initialMessage == null) {
+    print('no got noti');
+  } else {
+    print('noti = $initialMessage');
+  }
+  //
   runApp(const MyApp());
 }
 
@@ -30,7 +50,10 @@ class MyApp extends StatelessWidget {
         backgroundColor: Colors.white,
       ),
       debugShowCheckedModeBanner: false,
-      home: const Home(),
+      routes: {
+        '/': (context) => const Home(),
+        '/chat': (context) => Tex(m: 'Chat'),
+      },
     );
   }
 }
@@ -45,8 +68,8 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   void initState() {
-    fcmTokenPrint();
-    listenNotification();
+    // fcmTokenPrint();
+    listenNotification(context);
     super.initState();
   }
 
@@ -65,7 +88,7 @@ class _HomeState extends State<Home> {
       body: const Center(
           child: Text(
         'Home',
-        style: TextStyle(fontSize: 23, fontWeight: FontWeight.w700),
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
       )),
     );
   }
@@ -76,13 +99,15 @@ Future<void> fcmTokenPrint() async {
   print(fcmToken);
 }
 
-Future<void> listenNotification() async {
+Future<void> listenNotification(BuildContext context) async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message whilst in the foreground!');
     print('Message data: ${message.data}');
 
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
+      Navigator.pushNamed(context, '/chat');
     }
   });
+  // Navigator.pushNamed(context, '/chat');
 }
