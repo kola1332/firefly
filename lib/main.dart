@@ -5,6 +5,7 @@ import 'package:firefly/tex.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -13,32 +14,19 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   print('NEW LINE ================================');
-  // 1
-  // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //   print('Got a message whilst in the foreground!');
-  //   print('Message data: ${message.data}');
-
-  //   if (message.notification != null) {
-  //     print('Message also contained a notification: ${message.notification}');
-  //   }
-  // });
-  // 2
-  // RemoteMessage? initialMessage =
-  //     await FirebaseMessaging.instance.getInitialMessage();
-  // if (initialMessage == null) {
-  //   print('no got noti');
-  // } else {
-  //   print('noti = $initialMessage');
-  // }
-  //
-  runApp(const MyApp());
+  // Get any initial links
+  final PendingDynamicLinkData? initialLink =
+      await FirebaseDynamicLinks.instance.getInitialLink();
+  runApp(MyApp(initialLink: initialLink));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, this.initialLink});
+  final initialLink;
 
   @override
   Widget build(BuildContext context) {
+    print(initialLink);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.white,
@@ -52,8 +40,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         // '/': (context) => const Home(),
-        '/': (context) => const Application(),
+        '/': (context) => Application(initialLink: initialLink),
         '/chat': (context) => const Tex(m: 'Chat'),
+        '/home': (context) => const Tex(m: 'Home Page'),
       },
     );
   }
@@ -70,8 +59,6 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     // fcmTokenPrint();
-    listenNotification(context);
-    listenNotification2(context);
     super.initState();
   }
 

@@ -14,26 +14,8 @@ class Tex extends StatefulWidget {
 }
 
 class _TexState extends State<Tex> {
-  // Future<void> setupInteractedMessage() async {
-  //   RemoteMessage? initialMessage =
-  //       await FirebaseMessaging.instance.getInitialMessage();
-
-  //   if (initialMessage != null) {
-  //     _handleMessage(initialMessage);
-  //   }
-
-  //   FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  // }
-
-  // void _handleMessage(RemoteMessage message) {
-  //   if (message.data['type'] == 'chat') {
-  //     Navigator.pushNamed(context, '/chat');
-  //   }
-  // }
-
   @override
   void initState() {
-    // setupInteractedMessage();
     super.initState();
   }
 
@@ -67,29 +49,20 @@ class _TexState extends State<Tex> {
 }
 
 class Application extends StatefulWidget {
-  const Application({super.key});
+  const Application({super.key, this.initialLink});
+  final initialLink;
 
   @override
   State<StatefulWidget> createState() => _Application();
 }
 
 class _Application extends State<Application> {
-  // It is assumed that all messages contain a data field with the key 'type'
   Future<void> setupInteractedMessage() async {
-    // Get any messages which caused the application to open from
-    // a terminated state.
     RemoteMessage? initialMessage =
         await FirebaseMessaging.instance.getInitialMessage();
-
-    // If the message also contains a data property with a "type" of "chat",
-    // navigate to a chat screen
-    // Navigator.pushNamed(context, '/chat'); ......выаыва
     if (initialMessage != null) {
       _handleMessage(initialMessage);
     }
-
-    // Also handle any interaction when the app is in the background via a
-    // Stream listener
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
@@ -101,13 +74,20 @@ class _Application extends State<Application> {
     }
   }
 
+  void deepLinkPush(initialLink) {
+    if (initialLink != null) {
+      final Uri deepLink = initialLink.link;
+      // Example of using the dynamic link to push the user to a different screen
+      print(deepLink.path);
+      Navigator.pushNamed(context, deepLink.path);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-
-    // Run code required to handle interacted messages in an async function
-    // as initState() must not be async
     setupInteractedMessage();
+    deepLinkPush(widget.initialLink);
   }
 
   @override
