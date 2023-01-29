@@ -5,7 +5,7 @@ import 'package:firefly/tex.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,18 +15,16 @@ void main() async {
   );
   print('NEW LINE ================================');
   // Get any initial links
-  final PendingDynamicLinkData? initialLink =
-      await FirebaseDynamicLinks.instance.getInitialLink();
-  runApp(MyApp(initialLink: initialLink));
+  // final PendingDynamicLinkData? initialLink =
+  //     await FirebaseDynamicLinks.instance.getInitialLink();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, this.initialLink});
-  final initialLink;
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    print(initialLink);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
       systemNavigationBarColor: Colors.white,
       systemNavigationBarDividerColor: Colors.white,
@@ -39,10 +37,11 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routes: {
-        // '/': (context) => const Home(),
-        '/': (context) => Application(initialLink: initialLink),
+        '/': (context) => const Application(),
         '/chat': (context) => const Tex(m: 'Chat'),
         '/home': (context) => const Tex(m: 'Home Page'),
+        '/detail': (context) => const Tex(m: 'Detail Page'),
+        '/cart': (context) => const Tex(m: 'Cart Page'),
       },
     );
   }

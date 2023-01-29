@@ -49,8 +49,7 @@ class _TexState extends State<Tex> {
 }
 
 class Application extends StatefulWidget {
-  const Application({super.key, this.initialLink});
-  final initialLink;
+  const Application({super.key});
 
   @override
   State<StatefulWidget> createState() => _Application();
@@ -87,7 +86,6 @@ class _Application extends State<Application> {
   void initState() {
     super.initState();
     setupInteractedMessage();
-    deepLinkPush(widget.initialLink);
   }
 
   @override
