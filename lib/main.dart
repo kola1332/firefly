@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_typing_uninitialized_variables, use_build_context_synchronously
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firefly/tex.dart';
