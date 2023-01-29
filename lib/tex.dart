@@ -22,8 +22,8 @@ class _TexState extends State<Tex> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-      systemNavigationBarColor: Colors.black,
-      systemNavigationBarDividerColor: Colors.black,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarDividerColor: Colors.white,
     ));
     return Scaffold(
         backgroundColor: Colors.white,
