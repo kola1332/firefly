@@ -9,7 +9,7 @@ part of 'task_model.dart';
 TaskModel _$TaskModelFromJson(Map<String, dynamic> json) => TaskModel(
       albumId: json['albumId'] as int,
       id: json['id'] as int,
-      titile: json['titile'] as String,
+      title: json['title'] as String,
       url: json['url'] as String,
       thumbnailUrl: json['thumbnailUrl'] as String,
     );
@@ -17,7 +17,7 @@ TaskModel _$TaskModelFromJson(Map<String, dynamic> json) => TaskModel(
 Map<String, dynamic> _$TaskModelToJson(TaskModel instance) => <String, dynamic>{
       'albumId': instance.albumId,
       'id': instance.id,
-      'titile': instance.titile,
+      'title': instance.title,
       'url': instance.url,
       'thumbnailUrl': instance.thumbnailUrl,
     };

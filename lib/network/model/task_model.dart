@@ -6,14 +6,14 @@ part 'task_model.g.dart';
 class TaskModel {
   int albumId;
   int id;
-  String titile;
+  String title;
   String url;
   String thumbnailUrl;
 
   TaskModel({
     required this.albumId,
     required this.id,
-    required this.titile,
+    required this.title,
     required this.url,
     required this.thumbnailUrl,
   });
