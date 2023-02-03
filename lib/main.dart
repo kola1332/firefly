@@ -5,7 +5,6 @@ import 'package:firefly/tex.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-// import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -14,9 +13,6 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   print('NEW LINE ================================');
-  // Get any initial links
-  // final PendingDynamicLinkData? initialLink =
-  //     await FirebaseDynamicLinks.instance.getInitialLink();
   runApp(const MyApp());
 }
 
@@ -93,7 +89,7 @@ Future<void> listenNotification(BuildContext context) async {
     // print('Message data: ${message.data}');
 
     if (message.notification != null) {
-      // print('Message also contained a notification: ${message.notification}');
+      print('Message also contained a notification: ${message.notification}');
       print('go to chat 1 met');
       Navigator.pushNamed(context, '/chat');
     }
